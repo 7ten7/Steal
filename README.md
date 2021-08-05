@@ -1,8 +1,27 @@
-# SecretlyTool
-利用Go简单实现了一个打包文件或文件夹，并上传阿里云OSS的小工具。方便日后从服务器上获取一些东西。
+# Steal
+渗透时遇到需要下载一整个文件夹的内容时比较麻烦，故写了个小工具实现文件打包，并上传至阿里云OSS，方便信息的获取。
 
-# TODO
-- 实现上传进度条
-- 分块传输
-- 断点续传
-- 传输加密
+```bash
+   _____  __                __
+  / ___/ / /_ ___   ____ _ / /
+  \__ \ / __// _ \ / __ `// /
+ ___/ // /_ /  __// /_/ // /
+/____/ \__/ \___/ \__,_//_/
+                                    By @ 7TEN7
+Steal version: SecretlyTool/0.0.2
+Usage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]
+
+Options:
+
+  -b string
+        Bucket
+  -e string
+        Endpoint
+  -f string
+        local file path
+  -h    help
+  -k string
+        AccessKeyId
+  -s string
+        AccessKeySecret
+```

@@ -1,4 +1,4 @@
-module SecretlyTool
+module Steal
 
 go 1.15
 
