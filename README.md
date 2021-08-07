@@ -8,8 +8,8 @@
  ___/ // /_ /  __// /_/ // /
 /____/ \__/ \___/ \__,_//_/
                                     By @ 7TEN7
-Steal version: SecretlyTool/0.0.2
-Usage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]
+Steal version: Steal/0.0.2
+Usage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]
 
 Options:
 
