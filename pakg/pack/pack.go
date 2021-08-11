@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Zip(src string, dst string) error {
+func Zip(src string, dst string, exclude string) error {
 	destinationFile, err := os.Create(dst)
 	defer destinationFile.Close()
 
@@ -23,6 +23,9 @@ func Zip(src string, dst string) error {
 		}
 		if err != nil {
 			return err
+		}
+		if exclude != "" && strings.Contains(filePath, exclude) {
+			return nil
 		}
 		relPath := strings.TrimPrefix(filePath, filepath.Dir(src))
 		zipFile, err := myZip.Create(relPath)

