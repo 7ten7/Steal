@@ -8,13 +8,15 @@
  ___/ // /_ /  __// /_/ // /
 /____/ \__/ \___/ \__,_//_/
                                     By @ 7TEN7
-Steal version: Steal/0.0.2
-Usage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file]
+Steal version: Steal/0.0.3
+Usage: Steal [-k AccessKeyId] [-s AccessKeySecret] [-e Endpoint] [-b Bucket] [-f file] [-d Exclude]
 
 Options:
 
   -b string
         Bucket
+  -d string
+        Exclude
   -e string
         Endpoint
   -f string
