@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+var excludeDir []string
+
 func Zip(src string, dst string, exclude string) error {
 	destinationFile, err := os.Create(dst)
 	defer destinationFile.Close()
@@ -17,6 +19,10 @@ func Zip(src string, dst string, exclude string) error {
 	}
 	myZip := zip.NewWriter(destinationFile)
 	defer myZip.Close()
+	if exclude != "" {
+		excludeDir = strings.Split(exclude, ",")
+	}
+
 	err = filepath.Walk(src, func(filePath string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
@@ -24,8 +30,12 @@ func Zip(src string, dst string, exclude string) error {
 		if err != nil {
 			return err
 		}
-		if exclude != "" && strings.Contains(filePath, exclude) {
-			return nil
+		if excludeDir != nil {
+			for _, dir := range excludeDir {
+				if strings.Contains(filePath, dir) {
+					return nil
+				}
+			}
 		}
 		relPath := strings.TrimPrefix(filePath, filepath.Dir(src))
 		zipFile, err := myZip.Create(relPath)

